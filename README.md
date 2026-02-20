@@ -136,10 +136,8 @@ The API endpoints for the backend can be documented using tools like Postman or 
 ## 🤝 Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes. Make sure to follow the code style and include relevant tests.
 
-👨‍💻 Contributors
-
-[Anurag Kumar](https://github.com/anurag01122)
- — Project Owner
+# Owner
+Rankbook learning and software solutions. 
 
 ## 📫 Contact
 For any questions or suggestions, feel free to contact me.
