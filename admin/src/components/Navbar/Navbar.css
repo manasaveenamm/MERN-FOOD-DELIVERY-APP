@@ -1,0 +1,33 @@
+.navbar {
+  height: 70px;
+  background: #0f172a; /* dark admin theme */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.logo-text {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ff4c24; /* FoodExpress accent */
+  letter-spacing: 1px;
+}
+
+.logo-text span {
+  color: #ffffff;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #ff4c24;
+  cursor: pointer;
+}
