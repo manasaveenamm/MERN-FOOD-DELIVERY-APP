@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  backend:
+    image: food-backend:latest
+    container_name: food-backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "4000:4000"
+    restart: always
+    networks:
+      - monitoring-net
+
+  frontend:
+    image: food-frontend:latest
+    container_name: food-frontend
+    ports:
+      - "8081:80"
+    restart: always
+
+networks:
+  monitoring-net:
+    external: true

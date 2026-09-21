@@ -11,7 +11,7 @@ const StoreContextProvider = ({ children }) => {
   // ✅ Backend base URL (Render / Local safe)
   const url =
     import.meta.env.VITE_API_URL ||
-    "https://mern-food-delivery-backend-ereb.onrender.com";
+    "/api"
 
   // ================= ADD TO CART =================
   const addToCart = async (itemId) => {
