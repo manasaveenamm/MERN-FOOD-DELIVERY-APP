@@ -11,8 +11,6 @@ services:
     ports:
       - "4000:4000"
     restart: always
-    networks:
-      - monitoring-net
 
   frontend:
     build:
@@ -23,7 +21,3 @@ services:
     ports:
       - "8081:80"
     restart: always
-
-networks:
-  monitoring-net:
-    external: true
