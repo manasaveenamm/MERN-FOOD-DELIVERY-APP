@@ -1,8 +1,9 @@
-version: '3.8'
 
 services:
-
   backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     image: food-backend:latest
     container_name: food-backend
     env_file:
@@ -14,6 +15,9 @@ services:
       - monitoring-net
 
   frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     image: food-frontend:latest
     container_name: food-frontend
     ports:
