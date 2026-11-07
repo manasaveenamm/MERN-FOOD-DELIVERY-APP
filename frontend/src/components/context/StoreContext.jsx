@@ -9,9 +9,9 @@ const StoreContextProvider = ({ children }) => {
   const [token, setToken] = useState("");
 
   // ✅ Backend base URL (Render / Local safe)
-  const url =
-    import.meta.env.VITE_API_URL ||
-    "/api"
+ const url =
+  import.meta.env.VITE_API_URL ||
+  ""
 
   // ================= ADD TO CART =================
   const addToCart = async (itemId) => {
