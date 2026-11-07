@@ -8,6 +8,8 @@ services:
     container_name: food-backend
     env_file:
       - ./backend/.env
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "4000:4000"
     restart: always
