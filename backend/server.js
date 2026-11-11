@@ -61,6 +61,20 @@ app.options("*", cors());
 //db connection
 connectDB();
 
+const testSupabase = async () => {
+  const { data, error } = await supabase
+    .from('foods')
+    .select('id')
+    .limit(1);
+
+  if (error) {
+    console.error('Supabase connection FAILED:', error.message);
+  } else {
+    console.log('Supabase connection SUCCESS');
+  }
+};
+
+testSupabase();
 // api endpoints
 app.use("/api/food",foodRouter)
 app.use("/images",express.static('uploads'))
