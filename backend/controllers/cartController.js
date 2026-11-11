@@ -1,53 +1,149 @@
-import userModel from './../models/userModel.js';
 
-// add items to user cart
-const addToCart = async (req,res) =>{
+import supabase from '../config/supabase.js';
+
+// ADD ITEMS TO USER CART
+const addToCart = async (req, res) => {
     try {
-        let userData = await userModel.findById(req.body.userId)
-        let cartData = await userData.cartData;
-        if(!cartData[req.body.itemId]){
-            cartData[req.body.itemId] = 1 
-        }
-        else{
-            cartData[req.body.itemId] += 1;
-        }
+        const userId = req.body.userId;
+        const { itemId } = req.body;
 
-        await userModel.findByIdAndUpdate(req.body.userId,{cartData})
-        res.json({success:true,message:'Added to cart'});
-    } catch (error) {
-       console.log(error) ;
-       res.json({success:false,message:'Error'});
-    }
-}
-
-// remove items to user cart
-const removeFromCart = async (req, res) =>{
-    try {
-        let userData = await userModel.findById(req.body.userId)
-        let cartData = await userData.cartData;
-
-        if(cartData[req.body.itemId]>0){
-            cartData[req.body.itemId] -=1;
+        if (!itemId) {
+            return res.json({
+                success: false,
+                message: 'Food item ID is required'
+            });
         }
 
-        await userModel.findByIdAndUpdate(req.body.userId,{cartData});
-        res.json({success:true,message:'Removed from cart'});
-    } catch (error) {
-        console.log(error) ;
-       res.json({success:false,message:'Error'});
-    }
-}
+        // Check whether this item already exists in the cart
+        const { data: existingItem, error: fetchError } = await supabase
+            .from('cart_items')
+            .select('id, quantity')
+            .eq('user_id', userId)
+            .eq('food_id', itemId)
+            .maybeSingle();
 
-// fetch user cart data
-const getCart = async (req,res) =>{
+        if (fetchError) throw fetchError;
+
+        if (existingItem) {
+            const { error } = await supabase
+                .from('cart_items')
+                .update({ quantity: existingItem.quantity + 1 })
+                .eq('id', existingItem.id);
+
+            if (error) throw error;
+
+        } else {
+            const { error } = await supabase
+                .from('cart_items')
+                .insert({
+                    user_id: userId,
+                    food_id: itemId,
+                    quantity: 1
+                });
+
+            if (error) throw error;
+        }
+
+        res.json({
+            success: true,
+            message: 'Added to cart'
+        });
+
+    } catch (error) {
+        console.error('Add to cart error:', error.message);
+        res.json({
+            success: false,
+            message: 'Unable to add item to cart'
+        });
+    }
+};
+
+
+// REMOVE ITEMS FROM USER CART
+const removeFromCart = async (req, res) => {
     try {
-        let userData = await userModel.findById(req.body.userId)
-        let cartData = await userData.cartData;
-        res.json({success:true,cartData});
-    } catch (error) {
-        console.log(error) ;
-        res.json({success:false,message:'Error'});
-    }
-}
+        const userId = req.body.userId;
+        const { itemId } = req.body;
 
-export {addToCart, removeFromCart, getCart}
+        const { data: existingItem, error: fetchError } = await supabase
+            .from('cart_items')
+            .select('id, quantity')
+            .eq('user_id', userId)
+            .eq('food_id', itemId)
+            .maybeSingle();
+
+        if (fetchError) throw fetchError;
+
+        if (!existingItem) {
+            return res.json({
+                success: true,
+                message: 'Item is not in cart'
+            });
+        }
+
+        if (existingItem.quantity <= 1) {
+            const { error } = await supabase
+                .from('cart_items')
+                .delete()
+                .eq('id', existingItem.id);
+
+            if (error) throw error;
+
+        } else {
+            const { error } = await supabase
+                .from('cart_items')
+                .update({ quantity: existingItem.quantity - 1 })
+                .eq('id', existingItem.id);
+
+            if (error) throw error;
+        }
+
+        res.json({
+            success: true,
+            message: 'Removed from cart'
+        });
+
+    } catch (error) {
+        console.error('Remove from cart error:', error.message);
+        res.json({
+            success: false,
+            message: 'Unable to remove item from cart'
+        });
+    }
+};
+
+
+// FETCH USER CART DATA
+const getCart = async (req, res) => {
+    try {
+        const userId = req.body.userId;
+
+        const { data, error } = await supabase
+            .from('cart_items')
+            .select('food_id, quantity')
+            .eq('user_id', userId);
+
+        if (error) throw error;
+
+        // Convert database rows into the format expected by the frontend
+        const cartData = {};
+
+        data.forEach(item => {
+            cartData[item.food_id] = item.quantity;
+        });
+
+        res.json({
+            success: true,
+            cartData
+        });
+
+    } catch (error) {
+        console.error('Get cart error:', error.message);
+        res.json({
+            success: false,
+            message: 'Unable to fetch cart'
+        });
+    }
+};
+
+export { addToCart, removeFromCart, getCart };
