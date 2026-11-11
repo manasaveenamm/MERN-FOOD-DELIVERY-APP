@@ -61,7 +61,7 @@ pipeline {
                           --silent \
                           --show-error \
                           --request POST \
-                          "http://127.0.0.1:8000/api/v1/deploy?uuid=kmlruqekqgsyoiuejon55ilf" \
+                          "http://127.0.0.1:8000/api/v1/deploy?uuid=ky5no7fpjzifoqmhypuvf59h" \
                           --header "Authorization: Bearer $COOLIFY_TOKEN" \
                           --header "Accept: application/json"
                     '''
