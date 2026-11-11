@@ -142,6 +142,7 @@ Rankbook learning and software solutions.
 ## 📫 Contact
 For any questions or suggestions, feel free to contact me.
 Automated deployment testing with Coolify.
+Testing Coolify automatic deployment
 
 
 
