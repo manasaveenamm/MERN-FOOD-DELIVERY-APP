@@ -45,6 +45,30 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Deploy to Coolify') {
+            steps {
+                withCredentials([
+                    string(
+                        credentialsId: 'coolify-api-token',
+                        variable: 'COOLIFY_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        set +x
+
+                        curl --fail-with-body \
+                          --silent \
+                          --show-error \
+                          --request POST \
+                          "http://127.0.0.1:8000/api/v1/deploy?uuid=kmlruqekqgsyoiuejon55ilf" \
+                          --header "Authorization: Bearer $COOLIFY_TOKEN" \
+                          --header "Accept: application/json"
+                    '''
+                }
+            }
+        }
+
     }
 
     post {
