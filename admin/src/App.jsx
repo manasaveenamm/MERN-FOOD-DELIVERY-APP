@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
 
-  const url = import.meta.env.VITE_API_URL || 'http://192.168.1.23:4000';
+const url = import.meta.env.VITE_API_URL || 'http://192.168.1.23:4000';
 
   return (
     <div>
